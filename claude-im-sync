@@ -3,7 +3,7 @@
 # Claude-to-IM Sync - 全局命令包装器
 # 用于快速访问 Telegram bot 的对话内容
 
-SCRIPT_DIR="/Users/kidcvs/Documents/GitHub/aigc_ip"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NODE_SCRIPT="$SCRIPT_DIR/claude-im-sync.js"
 
 if [ ! -f "$NODE_SCRIPT" ]; then
