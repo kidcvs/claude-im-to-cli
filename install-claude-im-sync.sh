@@ -4,7 +4,7 @@
 
 set -e
 
-SCRIPT_DIR="/Users/kidcvs/Documents/GitHub/aigc_ip"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INSTALL_DIR="/usr/local/bin"
 SCRIPT_NAME="claude-im-sync"
 
