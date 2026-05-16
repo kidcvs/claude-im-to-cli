@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Claude-to-IM Sync - 全局命令包装器
+# 用于快速访问 Telegram bot 的对话内容
+
+SCRIPT_DIR="/Users/kidcvs/Documents/GitHub/aigc_ip"
+NODE_SCRIPT="$SCRIPT_DIR/claude-im-sync.js"
+
+if [ ! -f "$NODE_SCRIPT" ]; then
+    echo "错误: 找不到 claude-im-sync.js"
+    echo "请确保文件存在于: $NODE_SCRIPT"
+    exit 1
+fi
+
+node "$NODE_SCRIPT" "$@"
