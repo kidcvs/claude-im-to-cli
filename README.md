@@ -21,7 +21,7 @@
 ### 前置要求
 
 - Node.js >= 14.0.0
-- 已安装并运行过 [claude-to-im](https://github.com/anthropics/claude-to-im) Telegram Bot
+- 已安装并运行过 [claude-to-im](https://github.com/op7418/Claude-to-IM) Telegram Bot
 
 ### 安装
 
@@ -95,6 +95,71 @@ claude-im-sync show <session-id> --full
 | `export [id] [path]` | 导出会话 | `claude-im-sync export latest ./out.json` |
 | `help` | 显示帮助 | `claude-im-sync help` |
 
+### 输出示例
+
+`claude-im-sync list` 的典型输出：
+
+```
+=== Claude-to-IM 会话列表 ===
+
+共找到 10 个会话
+
+1. 会话 ID: 434263bb-dc43-4245-927a-1bec9a0a630e
+   最后更新: 2026/05/16 15:15:27
+   消息数量: 7
+   首条消息: 当前工作目录是什么...
+```
+
+`claude-im-sync export` 生成的 JSON 格式：
+
+```json
+{
+  "session_id": "434263bb-dc43-4245-927a-1bec9a0a630e",
+  "exported_at": "2026-05-16T07:15:27.000Z",
+  "last_modified": "2026-05-16T07:15:27.000Z",
+  "message_count": 7,
+  "messages": [
+    {
+      "role": "user",
+      "content": "当前工作目录是什么"
+    },
+    {
+      "role": "assistant",
+      "content": "当前工作目录是：\n\n```\n/home/user\n```"
+    }
+  ]
+}
+```
+
+## 🧪 高级用法
+
+### 实时监控最新对话
+
+```bash
+#!/bin/bash
+# watch-telegram.sh
+while true; do
+    clear
+    echo "=== Telegram Bot 最新对话 ==="
+    claude-im-sync latest 5
+    echo ""
+    echo "刷新时间: $(date)"
+    sleep 30
+done
+```
+
+### 与 jq 配合处理导出 JSON
+
+```bash
+claude-im-sync export latest ./session.json
+
+# 只提取用户的提问
+jq '.messages[] | select(.role == "user") | .content' ./session.json
+
+# 统计消息数量
+jq '.messages | length' ./session.json
+```
+
 ## 🎯 核心功能
 
 - 📋 **会话列表** - 显示所有 Telegram 会话的概览（ID、时间、消息数）
@@ -111,10 +176,7 @@ claude-im-to-cli/
 ├── claude-im-sync                 # Bash 包装器
 ├── install-claude-im-sync.sh      # 安装脚本
 ├── README.md                      # 项目说明（本文件）
-├── README-claude-im-sync.md       # 详细使用文档
-├── EXAMPLES-claude-im-sync.md     # 使用示例
-├── SUMMARY-claude-im-sync.md      # 技术总结
-└── 完成总结.md                     # 快速开始指南
+└── EXAMPLES-claude-im-sync.md     # 使用示例
 ```
 
 ## 🔍 工作原理
@@ -124,12 +186,40 @@ claude-im-to-cli/
 3. **格式化输出** - 以易读的格式显示对话内容
 4. **导出功能** - 转换为标准 JSON 格式供其他工具使用
 
-## 📖 文档
+### 数据存储位置
 
-- [完整使用文档](./README-claude-im-sync.md) - 详细的功能说明和命令参考
+- **会话数据**：`~/.claude-to-im/data/messages/`
+- **会话元数据**：`~/.claude-to-im/data/sessions.json`
+- **每个会话**：独立的 JSON 文件，以会话 ID 命名
+
+## 🩺 故障排除
+
+### 找不到会话数据
+
+确认 claude-to-im 已经安装并至少运行过一次：
+
+```bash
+ls -la ~/.claude-to-im/data/messages/
+```
+
+### 权限问题
+
+确保脚本有执行权限：
+
+```bash
+chmod +x /path/to/claude-im-to-cli/claude-im-sync
+chmod +x /path/to/claude-im-to-cli/claude-im-sync.js
+```
+
+### Node.js 未安装
+
+```bash
+node --version  # 需要 >= 14.0.0
+```
+
+## 📖 更多文档
+
 - [使用示例](./EXAMPLES-claude-im-sync.md) - 实际场景和示例代码
-- [技术总结](./SUMMARY-claude-im-sync.md) - 项目概述和技术实现
-- [快速开始](./完成总结.md) - 快速上手指南
 
 ## 🛠️ 手动安装
 
@@ -183,7 +273,7 @@ node claude-im-sync.js list
 ## 🙏 致谢
 
 - [Anthropic](https://www.anthropic.com/) - Claude AI
-- [claude-to-im](https://github.com/anthropics/claude-to-im) - Telegram Bot 基础
+- [claude-to-im](https://github.com/op7418/Claude-to-IM) - Telegram Bot 基础
 
 ## 📝 更新日志
 
@@ -192,6 +282,15 @@ node claude-im-sync.js list
 - 🎉 初始版本发布
 - ✅ 支持列出会话、查看对话、导出功能
 - ✅ 完整的文档和使用示例
+
+## 🔮 Roadmap
+
+- [ ] 支持搜索对话内容（关键词搜索）
+- [ ] 支持按日期范围筛选
+- [ ] 支持导出为 Markdown 格式
+- [ ] 支持将 Telegram 对话直接注入 Claude Code CLI 上下文
+- [ ] 支持实时监听新消息
+- [ ] 双向同步（Claude Code CLI → Telegram）
 
 ---
 
