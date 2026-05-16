@@ -272,7 +272,7 @@ node claude-im-sync.js list
 
 ## 🙏 致谢
 
-- [Anthropic](https://www.anthropic.com/) - Claude AI
+- [Anthropic Claude Code](https://github.com/anthropics/claude-code) - Claude Code CLI
 - [claude-to-im](https://github.com/op7418/Claude-to-IM) - Telegram Bot 基础
 
 ## 📝 更新日志
